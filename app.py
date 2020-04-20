@@ -69,32 +69,12 @@ def update_bezos_data(df_loc=amzn_df_loc):
     return new_df
 
 
-# ========== PLOT AMAZON STOCK DATA ==========
-# fig = px.scatter(amzn_df, x='date', y='close', template='ggplot2', title='AMZN stock price', labels={'close': 'Price (USD)', 'date': 'Date'})
-# fig.update_traces(mode='lines+markers')
-# fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])  # hide weekends
-# fig.show()
-
-# ========== CALCULATE BEZOS' NET WORTH ==========
-# fig = px.scatter(amzn_df, x='date', y='bezos_year', template='ggplot2', title="Jeff Bezos' 2020 net worth gains",
-#                  labels={'close': 'Change to Net Worth (USD)', 'date': 'Date', 'bezos_year': 'YTD gains'})
-# fig.update_traces(mode='lines+markers')
-# fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])  # hide weekends
-# fig.show()
-
-# bezos_df = amzn_df.melt(id_vars='date', value_vars=['bezos_bucks', 'bezos_year', 'bezos_week'])
-
-
 # ========== GET THE LATEST WEEKLY UNEMPLOYMENT DATA ==========
 def update_unemp_data(df_loc=umemp_df_loc):
     unemp_data = fred.get_series('ICSA')
     new_df = unemp_data.to_frame('unemployment').reset_index().rename(columns={'index': 'date'})
     new_df.to_csv(df_loc)
     return new_df
-
-# fig = px.scatter(unemp_df, x='date', y='unemployment', log_y=True)
-# fig.update_traces(mode='lines+markers')
-# fig.show()
 
 # ========== DASH APP ==========
 amzn_df = update_bezos_data()
