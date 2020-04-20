@@ -14,7 +14,7 @@ root_logger.addHandler(sh)
 import pandas as pd
 import requests
 import plotly.express as px
-import datetime
+from datetime import datetime
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -181,7 +181,7 @@ def update_unemp_graph(n):
 @app.callback(Output('bezos_text', 'children'),
               [Input('bezos_text-interval', 'n_intervals')])
 def update_bezos_text(n):
-    ytd_td = datetime.datetime.now() - datetime.datetime.fromisoformat('2020-01-01')
+    ytd_td = datetime.now() - datetime.fromisoformat('2020-01-01')
     ytd_seconds = ytd_td.total_seconds()
     bezos_secondly = round(amzn_df.iloc[-1].bezos_year / ytd_seconds)
     bezos_tot = bezos_secondly * n
