@@ -87,6 +87,14 @@ server = app.server
 
 title = 'Jeff Bezos Wealth | COVID-19 Economics tracker'
 app.title = title
+jph_info_div = html.Div([
+    html.Small([
+        'By JP Hwang - ',
+        html.A('Twitter', href='https://twitter.com/_jphwang'),
+        ' | ',
+        html.A('LinkedIn', href='https://www.linkedin.com/in/jphwang/'),
+    ])
+])
 app.layout = dbc.Container([
     dbc.Jumbotron([
         html.H2(title),
@@ -96,6 +104,8 @@ app.layout = dbc.Container([
         dbc.Button(html.Small(html.A('Source Code', href='#', style={'color': 'white'})), color='primary'),
         ' ',
         dbc.Button(html.Small(html.A('Tutorial article', href='#', style={'color': 'white'})), color='primary'),
+        html.Hr(className="my-2"),
+        jph_info_div,
     ]),
     html.Div([
         html.Div(id='bezos_text', children=[]),
@@ -118,7 +128,6 @@ app.layout = dbc.Container([
             n_intervals=0
         )
     ]),
-    # TODO - add unemployment graph for context
     html.Hr(className="my-2"),
     dbc.Alert(["At the same time, weekly filings for unemployment in the United States has exploded, starting in March 2020."], color="info"),
     html.Div([
@@ -132,7 +141,8 @@ app.layout = dbc.Container([
             n_intervals=0
         )
     ]),
-    # TODO - add notes about me / link to blog
+    jph_info_div,
+    html.Hr(className="my-2"),
 ])
 
 
@@ -221,11 +231,38 @@ def update_bezos_text(n):
         ]
     )
 
+    card_content_bezos_donations = [
+        dbc.CardHeader(f"Bezos' total COVID-19 donations:"),
+        dbc.CardBody([
+            html.H5(["Is about ", dbc.Badge(f"{round(100 * 10**6 / (bezos_secondly * 60 * 60 * 24), 2)}", color='warning'), " days' earnings"], className="card-title"),
+            html.P(
+                [f"He has pledged about US$100m to food banks, while his net worth has increased about ", dbc.Badge(str(round(amzn_df.iloc[-1].bezos_year / 10**9, 1)), color='success'), " billion U.S. dollars this year. "],
+                className="card-text",
+            ),
+        ])]
+
+    card_content_donations_info = dbc.CardBody(
+        [
+            html.Blockquote(
+                [
+                    html.P(html.Small(f"By contrast, Jack Dorsey, Twitter and Square CEO, has donated $1bn to COVID-19 relief."), className="text-muted"),
+                    html.P(f"Dorsey's donation is estimated to be about 28% of his net worth, vs Bezos' 0.075% donation"),
+                    html.Footer(
+                        html.Small([html.A("Source", href="https://fred.stlouisfed.org/series/ICSA")]),
+                    ),
+                ],
+                className="blockquote",
+            )
+        ]
+    )
+
     cards = dbc.CardColumns([
         dbc.Card(card_content_worth, color="success", outline=True),
         dbc.Card(card_content_inc_stats, color="secondary", outline=True),
         dbc.Card(card_content_unemp, color="danger", outline=True),
         dbc.Card(card_content_unemp_stats, color="warning", outline=True),
+        dbc.Card(card_content_bezos_donations, color="warning", outline=True),
+        dbc.Card(card_content_donations_info, color="info", outline=True),
     ])
 
     bezos_txt.append(cards)
