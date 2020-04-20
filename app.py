@@ -21,16 +21,25 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 from fredapi import Fred
 import dash_bootstrap_components as dbc
+import os
 
 desired_width = 320
 pd.set_option('display.max_columns', 20)
 pd.set_option('display.width', desired_width)
 
 # ========== LOAD TOKENS / SET CONSTANTS==========
-with open('../../tokens/tiingo_token.txt', 'r') as f:
-    tiingo_token = f.read().strip()
-with open('../../tokens/fred_token.txt', 'r') as f:
-    fred_token = f.read().strip()
+if 'TIINGO_KEY' in os.environ:
+    tiingo_token = os.environ['TIINGO_KEY']
+else:
+    with open('../../tokens/tiingo_token.txt', 'r') as f:
+        tiingo_token = f.read().strip()
+
+if 'FRED_KEY' in os.environ:
+    fred_token = os.environ['FRED_KEY']
+else:
+    with open('../../tokens/fred_token.txt', 'r') as f:
+        fred_token = f.read().strip()
+
 fred = Fred(api_key=fred_token)
 amzn_df_loc = 'amzn_df.csv'
 umemp_df_loc = 'unemp_df.csv'
